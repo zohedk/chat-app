@@ -1,0 +1,22 @@
+services:
+  chat-app-postgres:
+    image: postgres:15
+    container_name: chat-db
+    environment:
+      POSTGRES_USER: postgres_user
+      POSTGRES_PASSWORD: postgres_password
+      POSTGRES_DB: chat
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+  chat-app-redis:
+    image: redis/redis-stack:latest
+    container_name: redis-stack
+    ports:
+      - 6379:6379
+      - 8001:8001
+
+volumes:
+  postgres_data:
+    driver: local

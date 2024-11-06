@@ -1,0 +1,30 @@
+{
+  "name": "chat-server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "tsc-watch --onSuccess \"nodemon dist/index.js\"",
+    "build": "tsc -b",
+    "start": "nodemon dist/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0",
+    "ioredis": "^5.4.1",
+    "nodemon": "^3.1.7",
+    "tsc-watch": "^6.2.0",
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.7.4",
+    "@types/ws": "^8.5.12",
+    "typescript": "^5.6.2"
+  }
+}

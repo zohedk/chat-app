@@ -1,0 +1,71 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String               @id @default(uuid())
+  name            String
+  email           String               @unique
+  password        String?
+  authType        String
+  rooms           ChatRoom[]           @relation("roomUser") // Many to many relation with User 
+  adminOfRooms    ChatRoom[]           @relation("RoomsAdmin") // room for which the user is admin
+  chats           Message[]            @relation("chatUser") // One to many relation with Chat
+  deletedMessages DeletedMessage[]
+  messageReads    MessageReadReceipt[] // Relation to track messages read by the user
+  createdAt       DateTime             @default(now())
+  updatedAt       DateTime             @updatedAt()
+}
+
+model ChatRoom {
+  id          Int       @id @default(autoincrement())
+  name        String?
+  users       User[]    @relation("roomUser") // Many to many relation with User
+  chats       Message[] // One to many relation with Chat
+  isGroupChat Boolean
+  admins      User[]    @relation("RoomsAdmin") //  Many to many relation with User
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+}
+
+model Message {
+  id        String               @id @default(uuid())
+  content   String
+  userId    String
+  roomId    Int
+  room      ChatRoom             @relation(fields: [roomId], references: [id])
+  user      User                 @relation("chatUser", fields: [userId], references: [id])
+  readBy    MessageReadReceipt[] // Relation to track users who read the message
+  deleteBy  DeletedMessage[]
+  createdAt DateTime             @default(now())
+  updatedAt DateTime             @updatedAt()
+
+  @@index([userId])
+}
+
+model MessageReadReceipt {
+  userId String
+  chatId String
+  readAt DateTime @default(now())
+  user   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  chat   Message  @relation(fields: [chatId], references: [id], onDelete: Cascade)
+
+  @@id([userId, chatId])
+  @@index([userId])
+}
+
+model DeletedMessage {
+  id        String   @id @default(uuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  message   Message  @relation(fields: [messageId], references: [id])
+  messageId String
+  deletedAt DateTime @default(now())
+
+  @@index([userId])
+}

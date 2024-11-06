@@ -1,0 +1,1 @@
+{"root":["./process.env.d.ts","./src/index.ts","./src/app/index.ts","./src/clients/redis.ts","./src/service/websocketservice.ts","./src/utils/types/index.ts"],"version":"5.6.2"}
